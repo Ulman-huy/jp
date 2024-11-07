@@ -49,7 +49,7 @@ const Modal = ({
       setIsFirst(true);
       return;
     }
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (!open) {
         setAnimate(false);
       }

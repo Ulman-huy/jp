@@ -2,7 +2,8 @@ import { GEMINI_API_KEY } from "@/configs/contains";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
-const generatePrompt = (history: any) => {
+// @typescript-eslint/no-explicit-any
+const generatePrompt = (history: string[]) => {
   return `Tạo cho tôi 1 câu văn ngẫu nhiên chỉ sử dụng bằng "Hiragana". Câu văn này phải khác với câu văn trong lịch sử "${history}". Và chỉ trả về câu văn.`;
 };
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY!);

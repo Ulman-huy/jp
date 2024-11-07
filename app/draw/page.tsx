@@ -35,7 +35,9 @@ const Draw = () => {
           }
         }, "image/png");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (
