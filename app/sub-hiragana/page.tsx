@@ -16,7 +16,7 @@ const SubHiragana = () => {
   const [content, setContent] = useState("");
   const [value, setValue] = useState("");
   const [point, setPoint] = useState(0);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<
     { question: string; answer: string; point: number }[]
@@ -66,8 +66,12 @@ const SubHiragana = () => {
 
   return (
     <div className="p-4 flex flex-col pt-14 items-center justify-center">
-      <div className="border border-white/50 p-4 rounded-lg text-[50px] min-h-[110px] text-center transition">
-        <StreamText className="h-[94px]" content={content} showCursor={false} />
+      <div className="border border-white/50 p-4 rounded-lg md:text-[50px] max-md:text-2xl lg:min-h-[110px] min-h-[50px] text-center transition">
+        <StreamText
+          className="md:h-[94px] h-[50px]"
+          content={content}
+          showCursor={false}
+        />
       </div>
       <Button
         onClick={handleCreateHiragana}
@@ -75,7 +79,7 @@ const SubHiragana = () => {
       >
         <RxReload /> Random
       </Button>
-      <div className="mt-20 max-w-[500px] w-full">
+      <div className="md:mt-20 mt-10 max-w-[500px] w-full">
         <TextInput
           value={value}
           setValue={setValue}
@@ -116,7 +120,9 @@ const SubHiragana = () => {
               </div>
             ))
           ) : (
-            <div className="text-center text-white/50 mt-20">No history yet!</div>
+            <div className="text-center text-white/50 mt-20">
+              No history yet!
+            </div>
           )}
         </div>
       </div>
