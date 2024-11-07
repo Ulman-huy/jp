@@ -15,7 +15,7 @@ const generatePrompt = (question: string, answer: string) => {
 };
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-pro",
+  model: "gemini-1.5-flash",
 });
 
 const POST = async (req: NextRequest) => {

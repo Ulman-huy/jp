@@ -8,7 +8,7 @@ const generatePrompt = (history: string[]) => {
 };
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-pro",
+  model: "gemini-1.5-flash",
 });
 
 const POST = async (req: NextRequest) => {
@@ -16,7 +16,6 @@ const POST = async (req: NextRequest) => {
   const { history } = body;
   const prompt = generatePrompt(history);
   console.log({ prompt });
-
   const response = await model.generateContent([prompt]);
   return NextResponse.json(response);
 };
