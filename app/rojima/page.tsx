@@ -10,7 +10,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import useToast from "@/hooks/useToast";
 import { GenerateContentResult } from "@google/generative-ai";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { RxReload } from "react-icons/rx";
 
 const generatePromptCreate = (history: string) => {
@@ -69,6 +69,12 @@ const Rojima = () => {
       toastError("Something went wrong. Try again!");
     }
   };
+
+  useEffect(() => {
+    if (genAI && !content && history.length === 0) {
+      handleCreateHiragana();
+    }
+  }, [genAI]);
 
   const handleCheckHiragana = async () => {
     try {
