@@ -22,12 +22,13 @@ const SubHiragana = () => {
     { question: string; answer: string; point: number }[]
   >([]);
   const { toastError } = useToast();
+
   const handleCreateHiragana = async () => {
     try {
       setContent("");
       setValue("");
       const res = await createHiragana({
-        history: history.map((item) => item.question).join(","),
+        history: history.map((item) => item?.question).join(","),
       });
       setContent(res.response.candidates[0].content.parts[0].text);
     } catch (error) {

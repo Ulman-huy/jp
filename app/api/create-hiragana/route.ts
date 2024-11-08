@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 // @typescript-eslint/no-explicit-any
 const generatePrompt = (history: string) => {
-  return `Tạo cho tôi 1 câu văn ngẫu nhiên chỉ sử dụng bằng "Hiragana". Câu văn này phải khác với câu văn trong lịch sử "${history}". Và chỉ trả về câu văn.`;
+  return `Tạo cho tôi 1 câu văn ngẫu nhiên chỉ sử dụng bằng "Hiragana". Câu văn này phải khác với câu văn trong "${history}". Và chỉ trả về câu văn.`;
 };
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({
