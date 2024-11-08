@@ -50,9 +50,8 @@ const Rojima = () => {
       const response: GenerateContentResult = await genAI!.generateContent(
         prompt
       );
-      if (response) {
-        // @ts-ignore
-        setContent(response.response.candidates[0].content.parts[0].text);
+      if (response.response?.candidates?.[0]) {
+        setContent(response.response.candidates[0].content.parts[0].text!);
       }
     } catch (error) {
       console.log(error);

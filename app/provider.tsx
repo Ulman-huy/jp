@@ -1,12 +1,13 @@
 "use client";
 
-import { GEMINI_API_KEY } from "@/configs/contains";
 import AppContext from "@/contexts/AppContext";
 import { useAsyncInitialize } from "@/hooks/useAsyncInitialize";
 import { GenerativeModel, GoogleGenerativeAI } from "@google/generative-ai";
 import { useState } from "react";
 
-const initGenAI = new GoogleGenerativeAI(GEMINI_API_KEY!);
+const initGenAI = new GoogleGenerativeAI(
+  "AIzaSyBOshCB4qecTvtyfuFx1GnSkJk_TIsqTDg"
+);
 const model = initGenAI.getGenerativeModel({
   model: "gemini-1.5-flash",
 });
