@@ -11,20 +11,4 @@ const checkDraw = async ({
   return res;
 };
 
-const createHiragana = async ({ history }: { history: string }) => {
-  const res = await fetchApi.post("/create-hiragana", { history });
-  return res;
-};
-
-const checkHiragana = async ({
-  answer,
-  question,
-}: {
-  answer: string;
-  question: string;
-}) => {
-  const res = await fetchApi.post("/sub-hiragana", { answer, question });
-  return res;
-};
-
-export { checkDraw, createHiragana, checkHiragana };
+export { checkDraw };

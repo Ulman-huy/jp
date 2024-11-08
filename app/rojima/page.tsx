@@ -1,18 +1,35 @@
 "use client";
 
-import { checkHiragana, createHiragana } from "@/actions";
 import Button from "@/components/ui/Button";
 import CountUp from "@/components/ui/CountUp";
 import LoadingIcon from "@/components/ui/LoadingIcon";
 import Modal from "@/components/ui/Modal";
 import StreamText from "@/components/ui/StreamText";
 import TextInput from "@/components/ui/TextInput";
+import { useAppContext } from "@/contexts/AppContext";
 import useToast from "@/hooks/useToast";
+import { GenerateContentResult } from "@google/generative-ai";
 import clsx from "clsx";
 import { useState } from "react";
 import { RxReload } from "react-icons/rx";
 
-const SubHiragana = () => {
+const generatePromptCreate = (history: string) => {
+  return `Tạo cho tôi 1 câu văn ngẫu nhiên chỉ sử dụng bằng "Hiragana". Câu văn này phải khác với câu văn trong "${history}". Và chỉ trả về câu văn.`;
+};
+
+const generatePromptCheck = (question: string, answer: string) => {
+  return `
+    Hiragana:"${question}".
+    Romaji:"${answer}". 
+    Kiểm tra xem câu văn Romaji có đúng với câu văn Hiragana không?.
+    Trả về kết quả số điểm với công thức: (số lượng ký tự đúng / số lượng ký tự của câu văn Hiragana) * 100.
+    Chỉ trả về kết quả số điểm.
+    Không có ký tự nào khác.
+    Không giải thích gì thêm.
+  `;
+};
+const Rojima = () => {
+  const { genAI } = useAppContext();
   const [content, setContent] = useState("");
   const [value, setValue] = useState("");
   const [point, setPoint] = useState(0);
@@ -27,10 +44,16 @@ const SubHiragana = () => {
     try {
       setContent("");
       setValue("");
-      const res = await createHiragana({
-        history: history.map((item) => item?.question).join(","),
-      });
-      setContent(res.response.candidates[0].content.parts[0].text);
+      const prompt = generatePromptCreate(
+        history.map((item) => item.question).join(",")
+      );
+      const response: GenerateContentResult = await genAI!.generateContent(
+        prompt
+      );
+      if (response) {
+        // @ts-ignore
+        setContent(response.response.candidates[0].content.parts[0].text);
+      }
     } catch (error) {
       console.log(error);
       toastError("Something went wrong. Try again!");
@@ -40,20 +63,23 @@ const SubHiragana = () => {
   const handleCheckHiragana = async () => {
     try {
       setLoading(true);
-      const res = await checkHiragana({ answer: value, question: content });
-      const poitionString = res.response.candidates[0].content.parts[0].text;
-      setPoint(Math.ceil(parseFloat(poitionString)));
-      setOpenModal(true);
-      setHistory((prev) => {
-        return [
-          {
-            question: content,
-            answer: value,
-            point: Math.ceil(parseFloat(poitionString)),
-          },
-          ...prev,
-        ];
-      });
+      const prompt = generatePromptCheck(content, value);
+      const res: GenerateContentResult = await genAI!.generateContent(prompt);
+      if (res.response?.candidates?.[0]) {
+        const poitionString = res.response.candidates[0].content.parts[0].text;
+        setPoint(Math.ceil(parseFloat(poitionString!)));
+        setOpenModal(true);
+        setHistory((prev) => {
+          return [
+            {
+              question: content,
+              answer: value,
+              point: Math.ceil(parseFloat(poitionString!)),
+            },
+            ...prev,
+          ];
+        });
+      }
     } catch (error) {
       console.log(error);
       toastError("Something went wrong. Try again!");
@@ -152,4 +178,4 @@ const SubHiragana = () => {
   );
 };
 
-export default SubHiragana;
+export default Rojima;
