@@ -10,7 +10,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import useToast from "@/hooks/useToast";
 import { GenerateContentResult } from "@google/generative-ai";
 import clsx from "clsx";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RxReload } from "react-icons/rx";
 
 const generatePromptCreate = (history: string) => {
