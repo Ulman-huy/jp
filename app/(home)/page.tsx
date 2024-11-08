@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const services = [
   {
-    name: "Hiragana",
-    path: "/sub-hiragana",
+    name: "Rojima",
+    path: "/rojima",
   },
 ];
 
