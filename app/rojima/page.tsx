@@ -26,7 +26,9 @@ const SubHiragana = () => {
     try {
       setContent("");
       setValue("");
-      const res = await createHiragana({ history });
+      const res = await createHiragana({
+        history: history.map((item) => item.question).join(","),
+      });
       setContent(res.response.candidates[0].content.parts[0].text);
     } catch (error) {
       console.log(error);

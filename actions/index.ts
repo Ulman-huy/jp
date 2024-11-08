@@ -11,7 +11,7 @@ const checkDraw = async ({
   return res;
 };
 
-const createHiragana = async ({ history }: { history: any }) => {
+const createHiragana = async ({ history }: { history: string }) => {
   const res = await fetchApi.post("/create-hiragana", { history });
   return res;
 };
