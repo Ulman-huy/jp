@@ -63,7 +63,7 @@ const Modal = ({
     <ReactPortal wrapperId="modal">
       <div
         className={clsx(
-          "fixed inset-0 bg-black-50/30 backdrop-blur-sm transition-opacity opacity-0 z-50 flex items-center justify-center",
+          "fixed inset-0 bg-black-50/30 backdrop-blur-sm p-4 transition-opacity opacity-0 z-50 flex items-center justify-center",
           open ? "!opacity-100" : ""
         )}
       >

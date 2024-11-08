@@ -23,7 +23,8 @@ const generatePromptCheck = (question: string, answer: string) => {
     Romaji:"${answer}". 
     Kiểm tra xem câu văn Romaji có đúng với câu văn Hiragana không?.
     Trả về kết quả số điểm với công thức: (số lượng ký tự đúng / số lượng ký tự của câu văn Hiragana) * 100.
-    Chỉ trả về kết quả số điểm.
+    Trả về kết quả cho câu văn Hiragana bằng Romaji và nghĩa tiếng Việt.
+    Chỉ trả về kết quả số điểm, câu văn Romaji, nghĩa tiếng Việt, ngăn cách bằng dấu '>>>', và theo thứ tự điểm >>> Romaji >>> Nghĩa.
     Không có ký tự nào khác.
     Không giải thích gì thêm.
   `;
@@ -36,14 +37,24 @@ const Rojima = () => {
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<
-    { question: string; answer: string; point: number }[]
+    {
+      question: string;
+      answer: string;
+      point: number;
+      vietnamese: string;
+      romaji: string;
+    }[]
   >([]);
   const { toastError } = useToast();
+  const [vietnamese, setVietnamese] = useState("");
+  const [romaji, setRomaji] = useState("");
 
   const handleCreateHiragana = async () => {
     try {
       setContent("");
       setValue("");
+      setVietnamese("");
+      setRomaji("");
       const prompt = generatePromptCreate(
         history.map((item) => item.question).join(",")
       );
@@ -64,9 +75,16 @@ const Rojima = () => {
       setLoading(true);
       const prompt = generatePromptCheck(content, value);
       const res: GenerateContentResult = await genAI!.generateContent(prompt);
+      console.log(res);
       if (res.response?.candidates?.[0]) {
-        const poitionString = res.response.candidates[0].content.parts[0].text;
-        setPoint(Math.ceil(parseFloat(poitionString!)));
+        const resultArray =
+          res.response.candidates[0].content.parts[0].text!.split(">>>");
+        const poitionString = resultArray[0];
+        const romajiString = resultArray[1];
+        const vietnameseString = resultArray[2];
+        setPoint(Math.ceil(parseFloat(poitionString!.trim())));
+        setVietnamese(vietnameseString!.trim());
+        setRomaji(romajiString!.trim());
         setOpenModal(true);
         setHistory((prev) => {
           return [
@@ -74,6 +92,8 @@ const Rojima = () => {
               question: content,
               answer: value,
               point: Math.ceil(parseFloat(poitionString!)),
+              vietnamese: vietnameseString!.trim(),
+              romaji: romajiString!.trim(),
             },
             ...prev,
           ];
@@ -138,9 +158,13 @@ const Rojima = () => {
                 key={index}
                 className="flex items-center justify-between gap-4 mt-3 border-b pb-2 border-white/5"
               >
-                <div className="text-sm text-white/50 line-clamp-1">
-                  <p>{item.question}</p>
+                <div className="text-sm">
+                  <p className="text-[#B03052] line-clamp-1">{item.question}</p>
                   <p className="text-white/80 line-clamp-1">{item.answer}</p>
+                  <p className="text-[#03DEAA] line-clamp-1">{item.romaji}</p>
+                  <p className="text-white/50 line-clamp-1">
+                    {item.vietnamese}
+                  </p>
                 </div>
                 <span className="text-2xl font-semibold text-[#03DEAA] flex-shrink-0">
                   {item.point}
@@ -164,6 +188,12 @@ const Rojima = () => {
         <div className="pt-10">
           <div className="text-[150px]/[150px] font-bold flex justify-center">
             <CountUp from={0} to={point} />
+          </div>
+          <div className="mt-4">
+            <p className="text-[#B03052] text-lg">{content}</p>
+            <p className="text-white/80 text-lg">{value}</p>
+            <p className="text-[#03DEAA] text-lg">{romaji}</p>
+            <p className="text-white/50 text-lg">{vietnamese}</p>
           </div>
           <Button
             onClick={handleTryAgain}
