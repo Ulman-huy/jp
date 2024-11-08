@@ -16,7 +16,7 @@ export default function Home() {
           <Link
             key={index}
             href={service.path}
-            className="text-2xl font-semibold p-4 bg-white/5 w-full block rounded-lg"
+            className="text-2xl font-semibold p-4 border border-white/10 bg-white/5 w-full block rounded-lg"
           >
             {service.name}
           </Link>

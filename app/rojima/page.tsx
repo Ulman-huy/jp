@@ -103,7 +103,7 @@ const Rojima = () => {
       </div>
       <Button
         onClick={handleCreateHiragana}
-        className="mt-10 py-3 px-10 rounded-lg flex items-center gap-4 uppercase font-bold"
+        className="mt-10 py-3 px-10 rounded-lg border border-white/10 flex items-center gap-4 uppercase font-bold"
       >
         <RxReload /> Random
       </Button>
